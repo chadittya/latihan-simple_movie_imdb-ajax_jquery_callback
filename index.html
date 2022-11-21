@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LATIHAN CALLBACK API PUBLIC | MOVIE DATABASE</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row mt-5">
+        <div class="col">
+          <h1>Movie Database</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control input-keyword"
+              placeholder="Search movie..."
+            />
+            <button
+              class="btn btn-outline-primary search-button"
+              type="button"
+              id="button-addon2"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row movie-container"></div>
+    </div>
+
+    <!-- awal modal -->
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="movie-detail-modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-3">
+                  <img src="" alt="" class="img-fluid" />
+                </div>
+                <div class="col-md">
+                  <ul class="list-group">
+                    <li class="list-group-item"><h4>Avenger (2016)</h4></li>
+                    <li class="list-group-item">
+                      <strong>Director: </strong>Galih
+                    </li>
+                    <li class="list-group-item">
+                      <strong>Actors: </strong>Bimo, eric
+                    </li>
+                    <li class="list-group-item">
+                      <strong>Penulis: </strong>ya gatau
+                    </li>
+                    <li class="list-group-item">
+                      <strong>Plot :</strong><br />
+                      jadi gini
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- akhir modal  -->
+
+    <!-- bootsrap script -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+      integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+      crossorigin="anonymous"
+    ></script>
+    <!-- end of bootsrap script  -->
+
+    <!-- manual script  -->
+    <script src="script.js"></script>
+    <!-- end of manual script  -->
+  </body>
+</html>
