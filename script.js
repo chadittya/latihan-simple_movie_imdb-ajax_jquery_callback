@@ -1,84 +1,43 @@
-// MENGGUNAKAN JQUERY AJAX
-// $(".search-button").on("click", function () {
-//   $.ajax({
-//     url:
-//       "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" +
-//       $(".input-keyword").val(),
-//     success: (results) => {
-//       const movies = results.Search;
-//       movies.forEach((m) => {
-//         $(showCards(m)).appendTo(".movie-container");
-//       });
-
-//       // ketika tombol detail di click
-//       $(".modal-detail-button").on("click", function () {
-//         //   console.log($(this).attr("data-imdbid")); //cek attribut data-imdbid
-//         $.ajax({
-//           url:
-//             "http://www.omdbapi.com/?apikey=7506a05e&i=" +
-//             $(this).attr("data-imdbid"),
-//           success: (m) => {
-//             const movieDetail = showModals(m);
-//             $(".modal-body").html(movieDetail);
-//           },
-//           error: (e) => {
-//             console.log(e.responseText);
-//           },
-//         });
-//       });
-//     },
-//     error: (e) => {
-//       console.log(e.responseText);
-//     },
-//   });
-// });
-
-// MENGGUNAKAN FETCH
-// const searchButton = document.querySelector(".search-button");
-// searchButton.addEventListener("click", function () {
-//   const inputKeyword = document.querySelector(".input-keyword");
-//   fetch(
-//     "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" +
-//       inputKeyword.value
-//   )
-//     .then((r) => r.json())
-//     .then((r) => {
-//       const movies = r.Search;
-//       let cards = "";
-//       movies.forEach((m) => {
-//         cards += showCards(m);
-//       });
-//       const movieContainer = document.querySelector(".movie-container");
-//       movieContainer.innerHTML = cards;
-
-//       // ketika tombol detail di click
-//       const detailsButton = document.querySelectorAll(".modal-detail-button");
-//       detailsButton.forEach((db) => {
-//         db.addEventListener("click", function () {
-//           // console.log(this.dataset.imdbid); //cek dapat no imdb
-//           const imdbid = this.dataset.imdbid;
-//           fetch("http://www.omdbapi.com/?apikey=7506a05e&i=" + imdbid)
-//             .then((r) => r.json())
-//             .then((m) => {
-//               const movieDetail = showModals(m);
-//               const modalBody = document.querySelector(".modal-body");
-//               modalBody.innerHTML = movieDetail;
-//             });
-//         });
-//       });
-//     });
-// });
-
 //FETCH REFACTORING (MEMPERBAIKI CODE AGAR MUDAH DIBACA)
 //rapiin fetch menjadi fungsi
 //nambahin code async sebelum fungsi event agar memberitahukan akan ada method async yang akan dijalankan karena code yang dibuat sekrang adalah syncronus
 const searchButton = document.querySelector(".search-button");
 searchButton.addEventListener("click", async function () {
-  const inputKeyword = document.querySelector(".input-keyword");
-  const movies = await getMovies(inputKeyword.value);
-  updateUI(movies);
-  // console.log(movies);
+  try {
+    const inputKeyword = document.querySelector(".input-keyword");
+    const movies = await getMovies(inputKeyword.value);
+    updateUI(movies);
+  } catch (error) {
+    alert(error);
+  }
 });
+
+function getMovies(keyword) {
+  return fetch(
+    "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" + keyword
+  )
+    .then((r) => {
+      if (!r.ok) {
+        throw new Error(r.statusText);
+      }
+      return r.json();
+    })
+    .then((r) => {
+      if (r.Response === "False") {
+        throw new Error(r.Error);
+      }
+      return r.Search;
+    });
+}
+
+function updateUI(movies) {
+  let cards = "";
+  movies.forEach((m) => {
+    cards += showCards(m);
+  });
+  const movieContainer = document.querySelector(".movie-container");
+  movieContainer.innerHTML = cards;
+}
 
 //untuk tombol details karena munculnya setelah menjalankan event diatas, kita tidak bisa membuat event lagi/membuatnya dibawah code searchbutton karena akan dijalankan syncronus
 // untuk mengantisipasinya menggunakan EVENT BINDING
@@ -101,23 +60,6 @@ function updateUIDetail(m) {
   const movieDetail = showModals(m);
   const modalBody = document.querySelector(".modal-body");
   modalBody.innerHTML = movieDetail;
-}
-
-function updateUI(movies) {
-  let cards = "";
-  movies.forEach((m) => {
-    cards += showCards(m);
-  });
-  const movieContainer = document.querySelector(".movie-container");
-  movieContainer.innerHTML = cards;
-}
-
-function getMovies(keyword) {
-  return fetch(
-    "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" + keyword
-  )
-    .then((r) => r.json())
-    .then((r) => r.Search);
 }
 
 function showCards(m) {
