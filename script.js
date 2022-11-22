@@ -34,40 +34,91 @@
 // });
 
 // MENGGUNAKAN FETCH
+// const searchButton = document.querySelector(".search-button");
+// searchButton.addEventListener("click", function () {
+//   const inputKeyword = document.querySelector(".input-keyword");
+//   fetch(
+//     "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" +
+//       inputKeyword.value
+//   )
+//     .then((r) => r.json())
+//     .then((r) => {
+//       const movies = r.Search;
+//       let cards = "";
+//       movies.forEach((m) => {
+//         cards += showCards(m);
+//       });
+//       const movieContainer = document.querySelector(".movie-container");
+//       movieContainer.innerHTML = cards;
+
+//       // ketika tombol detail di click
+//       const detailsButton = document.querySelectorAll(".modal-detail-button");
+//       detailsButton.forEach((db) => {
+//         db.addEventListener("click", function () {
+//           // console.log(this.dataset.imdbid); //cek dapat no imdb
+//           const imdbid = this.dataset.imdbid;
+//           fetch("http://www.omdbapi.com/?apikey=7506a05e&i=" + imdbid)
+//             .then((r) => r.json())
+//             .then((m) => {
+//               const movieDetail = showModals(m);
+//               const modalBody = document.querySelector(".modal-body");
+//               modalBody.innerHTML = movieDetail;
+//             });
+//         });
+//       });
+//     });
+// });
+
+//FETCH REFACTORING (MEMPERBAIKI CODE AGAR MUDAH DIBACA)
+//rapiin fetch menjadi fungsi
+//nambahin code async sebelum fungsi event agar memberitahukan akan ada method async yang akan dijalankan karena code yang dibuat sekrang adalah syncronus
 const searchButton = document.querySelector(".search-button");
-searchButton.addEventListener("click", function () {
+searchButton.addEventListener("click", async function () {
   const inputKeyword = document.querySelector(".input-keyword");
-  fetch(
-    "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" +
-      inputKeyword.value
+  const movies = await getMovies(inputKeyword.value);
+  updateUI(movies);
+  // console.log(movies);
+});
+
+//untuk tombol details karena munculnya setelah menjalankan event diatas, kita tidak bisa membuat event lagi/membuatnya dibawah code searchbutton karena akan dijalankan syncronus
+// untuk mengantisipasinya menggunakan EVENT BINDING
+document.addEventListener("click", async function (e) {
+  if (e.target.classList.contains("modal-detail-button")) {
+    const imdbid = e.target.dataset.imdbid;
+    const movieDetail = await getMovieDetail(imdbid);
+    // console.log(movieDetail);
+    updateUIDetail(movieDetail);
+  }
+});
+
+function getMovieDetail(imdbid) {
+  return fetch("http://www.omdbapi.com/?apikey=7506a05e&i=" + imdbid)
+    .then((r) => r.json())
+    .then((m) => m);
+}
+
+function updateUIDetail(m) {
+  const movieDetail = showModals(m);
+  const modalBody = document.querySelector(".modal-body");
+  modalBody.innerHTML = movieDetail;
+}
+
+function updateUI(movies) {
+  let cards = "";
+  movies.forEach((m) => {
+    cards += showCards(m);
+  });
+  const movieContainer = document.querySelector(".movie-container");
+  movieContainer.innerHTML = cards;
+}
+
+function getMovies(keyword) {
+  return fetch(
+    "http://www.omdbapi.com/?i=tt3896198&apikey=7506a05e&s=" + keyword
   )
     .then((r) => r.json())
-    .then((r) => {
-      const movies = r.Search;
-      let cards = "";
-      movies.forEach((m) => {
-        cards += showCards(m);
-      });
-      const movieContainer = document.querySelector(".movie-container");
-      movieContainer.innerHTML = cards;
-
-      // ketika tombol detail di click
-      const detailsButton = document.querySelectorAll(".modal-detail-button");
-      detailsButton.forEach((db) => {
-        db.addEventListener("click", function () {
-          // console.log(this.dataset.imdbid); //cek dapat no imdb
-          const imdbid = this.dataset.imdbid;
-          fetch("http://www.omdbapi.com/?apikey=7506a05e&i=" + imdbid)
-            .then((r) => r.json())
-            .then((m) => {
-              const movieDetail = showModals(m);
-              const modalBody = document.querySelector(".modal-body");
-              modalBody.innerHTML = movieDetail;
-            });
-        });
-      });
-    });
-});
+    .then((r) => r.Search);
+}
 
 function showCards(m) {
   return `
